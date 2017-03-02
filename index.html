@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>socket-client</title>
+    <style>
+        .msg{
+            display: block;
+            clear:both;
+            width:300px;
+            display: flex;
+            align-items: center;
+        }
+        .msg .info{
+            text-align: center;
+        }
+        .msg .info img{
+            width:50px;
+            display: block;
+        }
+        .msg .content{
+            background-color: #72cdd2;
+            width: 80%;
+            border-radius: 40px 0px 0px 40px;
+            padding-left: 20px;
+        }
+        .msg.right .content{
+            border-radius:0px 40px 40px 0px;
+        }
+        .msg .info span{
+            color: #666;
+            font-size:16px;
+        }
+        .msg p{
+            color: #333;
+            font-size: 14px;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .msg-list{
+            padding-bottom: 100px;
+        }
+        .input{
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>客户端</h1>
+    <div class="input">
+        <input type="text" id="txt">
+        <button onclick="sendMsg()">发送</button>
+    </div>
+    
+    <div class="msg-list" id="msg">
+    </div>
+    <script>
+    var ws = new WebSocket('ws://192.168.1.111:8888')
+    //连接建立之后触发的事件
+    ws.onopen = function(){
+        //向服务端发送消息
+        // ws.send('我是客户端传递的消息')
+        console.log('连接服务器成功')
+    }
+    //接收服务器端的消息
+    ws.onmessage = function(data){
+        // console.log(data)
+        var msg = JSON.parse(data.data)
+        var strHtml = `<div class="msg right">
+            <div class="content">
+                <p>${msg.data}</p>
+            </div>
+            <div class="info">
+                <img src="${msg.img}">
+                <span>${msg.name}</span>
+            </div>            
+        </div>`
+        document.getElementById('msg').innerHTML += strHtml
+    }
+    function sendMsg(){
+        var msg = {}
+        msg.name = "arivin"
+        msg.img = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1488787752&di=c56c4ebcc05dc713b40134a83f352223&imgtype=jpg&er=1&src=http%3A%2F%2Fb.zol-img.com.cn%2Fdesk%2Fbizhi%2Fimage%2F6%2F960x600%2F1446010853326.jpg'
+        msg.data = document.getElementById('txt').value
+        ws.send(JSON.stringify(msg)) //把文本框中的内容进行发送
+        var strHtml = `<div class="msg left">
+            <div class="info">
+                <img src="${msg.img}">
+                <span>${msg.name}</span>
+            </div>
+            <div class="content">
+                <p>${msg.data}</p>
+            </div>
+        </div>`
+        document.getElementById('msg').innerHTML += strHtml
+    }
+    </script>
+</body>
+</html>

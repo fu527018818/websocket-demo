@@ -1,0 +1,14 @@
+{
+  "name": "websocket-demo",
+  "version": "1.0.0",
+  "description": "websocket应用例子",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "arivin",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^2.1.0"
+  }
+}
